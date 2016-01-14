@@ -1,0 +1,249 @@
+% dwdcstyle.sty  HE Boliang 2016-01-13
+%
+% 个人中文版式文件
+%
+% 实现参考代码：
+%   - 陈硕, https://github.com/chenshuo/typeset
+%   - Chad Jones, http://web.stanford.edu/~chadj/latex2.html
+% 
+
+% 中文版式采用陈硕的相关建议
+%   - 纸张: 185mm x 230mm
+%   - 版心: 一行39个汉字， 行距15.6pt，采用CTeX包设置
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{dwdcstyle}[2016/01/13]
+%\RequirePackage{expl3}
+
+% 处理参数
+
+%% 默认是article
+\newif\if@bookreport\@bookreportfalse
+\DeclareOption{book}{\@bookreporttrue}
+\DeclareOption{report}{\@bookreporttrue}
+\DeclareOption{article}{\@bookreportfalse}
+
+%% 默认是非打印电子版本
+\newif\if@print\@printfalse
+\DeclareOption{print}{\@printtrue}
+
+\ProcessOptions\relax
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[centering,paperwidth=180mm,paperheight=230mm,%
+body={390pt,530pt},marginparsep=10pt,marginpar=50pt]{geometry}
+\usepackage{amssymb,amsfonts,amsmath,latexsym,setspace}
+\usepackage{fancyhdr}
+\usepackage{color}
+\usepackage{enumitem}
+\usepackage{fancyvrb}
+\usepackage[bottom,perpage,symbol*]{footmisc}
+\usepackage{graphicx}
+\usepackage{makeidx}
+%\usepackage[toc]{multitoc} % 双列目录
+\usepackage{pifont}
+\usepackage{underscore}
+\usepackage[listings,theorems]{tcolorbox}
+\usepackage{colortbl}                  % 单元格加背景
+\usepackage{listings}
+
+%% 颜色定义
+% 参考 http://tool.oschina.net/commons?type=3
+% COLORES personales---------------------------------------------------
+\definecolor{DarkBlue}{rgb}{.1,0,.2} 
+\definecolor{darkblue}{rgb}{.0,.0,.3}
+\definecolor{Blue2}{rgb}{.1,.1,.5}  
+\definecolor{Royal}{rgb}{.2,.2,.8}  
+\definecolor{DarkGreen}{rgb}{0,.4,0}    % Dark Green
+\definecolor{Purple}{rgb}{.5,0,.5}  % purple
+\definecolor{Gray}{rgb}{.3,.3,.3}
+\definecolor{wcolornotas}{RGB}{74,0,148}%{RGB}{51,145,147} %
+\definecolor{miverde}{RGB}{44,162,67}
+\definecolor{codebg}{RGB}{238,233,233} % 浅灰，代码背景
+
+\definecolor{Cyan}{RGB}{0,139,139} 
+\definecolor{DarkRed}{RGB}{139,0,0} 
+\definecolor{DeepSkyBlue}{RGB}{0,104,139} 
+\definecolor{SkyBlue}{RGB}{74,112,139} 
+\definecolor{Maroon}{RGB}{176,48,96} 
+\definecolor{Tomato}{RGB}{205,79,57}
+\definecolor{OrangeRed}{RGB}{205,55,0}
+\definecolor{DarkSlateGray}{RGB}{47,79,79}
+\definecolor{AliceBlue}{RGB}{240,248,255}
+\definecolor{Snow}{RGB}{255,250,250}
+ 
+
+\usepackage[CJKbookmarks, pdfstartview=FitH]{hyperref}
+
+
+\DefineFNsymbols*{chinese}{{\ding{172}}{\ding{173}}{\ding{174}}{\ding{175}}%
+{\ding{176}}{\ding{177}}{\ding{178}}{\ding{179}}{\ding{180}}{\ding{181}}}
+\setfnsymbol{chinese}
+
+\hypersetup{bookmarksnumbered=true,bookmarksdepth=2}
+
+\if@print
+  \hypersetup{colorlinks=false}
+\else
+  \hypersetup{colorlinks=true, linkcolor=Maroon, urlcolor=Maroon, citecolor=Royal}
+\fi
+
+%--------------设定中文标题--------------
+%% 部分、章的中文设计
+\if@bookreport
+  \ctexset { chapter = { number={\thechapter } } }
+  %\CTEXsetup[format+={\raggedleft}]{chapter}
+  \ctexset { chapter = { beforeskip={10pt} } }
+  \ctexset { chapter = { afterskip={30pt} } }
+  \if@print
+    \ctexset { chapter = { format+={\color{black}} } }
+  \else
+    \ctexset { chapter = { format+={\color{DarkRed}} } }
+  \fi
+\fi
+
+\ctexset{ section = { format+={\raggedright } } }
+\ctexset{ section = { beforeskip={2.0ex plus -1ex minus -.2ex} } }
+\ctexset{ section = { afterskip={2.3ex plus .2ex minus 0.2ex} } }
+%\def\CTEX@chapter@aftername{\par} % \CTEXsetup[aftername={\par}]{chapter}
+
+\if@print
+  \ctexset{ section = { format+={\color{black}} } }
+  \ctexset{ subsection = { format+={\color{black}} } }
+\else
+  \ctexset{ section = { format+={\color{DarkSlateGray}} } }
+  \ctexset{ subsection = { format+={\color{SkyBlue}} } }
+\fi
+
+\ctexset{today=small}
+
+\renewcommand \thefigure{\thechapter-\arabic{figure}}
+\renewcommand \thetable{\thechapter-\arabic{table}}
+
+\newcommand\figcaption[1]{\def\@captype{figure}\caption{#1}}
+\newcommand\tabcaption[1]{\def\@captype{table}\caption{#1}}
+
+\long\def\@caption#1[#2]#3{%
+  \addcontentsline{\csname ext@#1\endcsname}{#1}%
+    {\protect\numberline{\csname fnum@#1\endcsname}{ \ignorespaces #2}}% change "the" to "fnum@"
+    \normalsize
+    \@makecaption{\csname fnum@#1\endcsname}{\ignorespaces #3}}
+
+\long\def\@makecaption#1#2{%
+  \vskip\abovecaptionskip
+  \sbox\@tempboxa{#1\quad#2}%
+  \ifdim \wd\@tempboxa >\hsize
+    #1\quad#2\par
+  \else
+    \global \@minipagefalse
+    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+  \fi
+  \vskip\belowcaptionskip}
+
+\setlength\abovecaptionskip{0pt}
+
+%%%  字体设置
+\setmainfont{TeX Gyre Pagella}
+\setmonofont{Source Code Pro}
+
+\newfontfamily\urlfont{PT Sans Narrow}
+\newfontfamily\codefont{Source Code Pro}
+
+%\setCJKfamilyfont
+
+\newcommand*{\song}{\CJKfamily{zhsong}} % 宋体
+\newcommand*{\hei}{\CJKfamily{zhhei}}   % 黑体
+\newcommand*{\kai}{\CJKfamily{zhkai}}  % 楷书
+\newcommand*{\fsong}{\CJKfamily{zhfs}} % 仿宋
+
+\newcommand{\fn}[1]{\texttt{#1}}            %仿宋
+\newcommand{\sfn}[1]{\texttt{\small #1}}    %仿宋
+\newcommand{\kw}[1]{\textsf{#1}}            %黑体
+\newcommand{\myurl}[1]{{\urlfont #1}}       %宋体
+\newcommand{\mpar}[1]{\marginpar[\hfill\kaishu #1]{\kaishu #1}}
+\newcommand{\mn}[1]{\texttt{\bs #1}}
+\newcommand{\code}[1]{\texttt{\color{DeepSkyBlue} \small #1}}
+
+\newcommand\bs{\textbackslash}
+
+%\renewenvironment{abstract}{
+%    \vspace{5mm}\noindent\linespread{1.3}
+%    \leftskip=2\ccwd \rightskip=2\ccwd
+%    \fsong
+%    
+%}{\endtrivlist}
+
+%%%%---- 代码录入
+\lstdefinelanguage{Golang}
+  {morekeywords={break,default,func,interface,select,case,defer,go,map,%
+   struct,chan,else,goto,package,switch,const,fallthrough,if,range,type, %
+   continue,for,import,return,var,uint8,uint16,uint32,uint64,%
+   int8,int16,int32,int64,float32,float64,complex64,complex128,byte,rune,%
+   true, false, make, new},%
+   sensitive=true,%
+   morecomment=[s]{/*}{*/},%
+   morecomment=[l]//,%
+   morestring=[b]", %
+   morestring=[b]', %
+  }%
+%%
+
+\lstdefinestyle{custom}{
+	basicstyle=\small\ttfamily,
+	numberstyle=\color{DeepSkyBlue}\tiny, 
+	keywordstyle=\color{blue!70}\ttfamily, 
+	commentstyle=\color{red!50!green!50!blue!50},
+    identifierstyle=\color{Tomato},
+	frame=lines, 
+    rulesepcolor=\color{red!20!green!20!blue!20},
+    stringstyle=\color{miverde},
+    escapeinside=``,
+	xleftmargin=0em,
+	xrightmargin=0em, 
+	aboveskip=1em,
+	tabsize=2,
+	columns=fullflexible,
+    %breakline=true,
+    showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+    showstringspaces=false,          % underline spaces within strings only
+    showtabs=false,
+    numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+    numbersep=5pt,
+    numberblanklines=false,
+    %framexleftmargin=3em,
+    title=\lstname
+}
+\lstset{escapechar=@,style=custom}
+
+\newcommand{\includecode}[3][c]{\lstinputlisting[caption=#2, name=#2, language=#1, style=custom]{#3}}
+
+\newenvironment{ul}{\begin{itemize}
+[itemsep=2pt plus 2pt minus 2pt,%
+topsep=3pt plus 2pt minus 2pt,%
+parsep=0pt plus 2pt minus 2pt,
+leftmargin=40pt]}{\end{itemize}}
+
+\newenvironment{ol}{\begin{enumerate}
+[itemsep=2pt plus 2pt minus 2pt,%
+topsep=3pt plus 2pt minus 2pt,%
+parsep=0pt plus 2pt minus 2pt,
+leftmargin=40pt]}{\end{enumerate}}
+
+\DefineVerbatimEnvironment %
+  {Code}{Verbatim}
+  {fontsize=\small,baselinestretch=0.9,xleftmargin=3mm}
+
+\DefineVerbatimEnvironment %
+  {smallcode}{Verbatim}
+  {fontsize=\scriptsize, baselinestretch=0.9, frame=single,
+    fillcolor=\color{codebg}, formatcom=\color{Gray},
+    xleftmargin=3em, xrightmargin=3em}
+
+\DefineVerbatimEnvironment%
+  {Codex}{Verbatim}
+  {fontsize=\small,baselinestretch=0.9,xleftmargin=3mm,%
+  frame=lines,labelposition=all,framesep=5pt}
+
+\makeindex
+
+\endinput
