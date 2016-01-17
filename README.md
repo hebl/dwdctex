@@ -25,3 +25,11 @@
 - 英文字体采用`TeX Gyre Pagella`，主页：[tex-gyre](http://www.gust.org.pl/projects/e-foundry/tex-gyre/pagella/) 
 - 代码字体采用`Source Code Pro`，这是`Adobe`开源的一个字体。主页：[source-code-pro](https://github.com/adobe-fonts/source-code-pro)
 
+由于使用`xelatex`进行编译，因此上述字体安装到系统的目录即可。
+
+### 安装
+
+建议安装再`$TEXMFLOCAL`目录下，路径为`$TEXMFLOCAL/tex/latex/dwdctex/dwdcstyle.sty`，然后运行`mktexlsr`更新文件信息，就可以
+在多个地方写文档进行调用了。前面的路径可以使用链接（在Linux/MacOS）下。
+
+一般情况下，以`TexLive`为例，其定义的`$TEXMFLOCAL`就是在其安装目录下的`texmf-local`目录，如果没有，可以自己建一个。
