@@ -27,6 +27,10 @@
 \newif\if@print\@printfalse
 \DeclareOption{print}{\@printtrue}
 
+%% 默认非双列目录
+\newif\if@twotoc\@twotocfalse
+\DeclareOption{twotoc}{\@twotoctrue}
+
 \ProcessOptions\relax
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -40,12 +44,15 @@ body={390pt,530pt},marginparsep=10pt,marginpar=50pt]{geometry}
 \usepackage[bottom,perpage,symbol*]{footmisc}
 \usepackage{graphicx}
 \usepackage{makeidx}
-%\usepackage[toc]{multitoc} % 双列目录
 \usepackage{pifont}
 \usepackage{underscore}
 \usepackage[listings,theorems]{tcolorbox}
 \usepackage{colortbl}                  % 单元格加背景
 \usepackage{listings}
+
+\if@twotoc
+  \usepackage[toc]{multitoc} % 双列目录
+\fi
 
 %% 颜色定义
 % 参考 http://tool.oschina.net/commons?type=3
