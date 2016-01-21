@@ -20,4 +20,119 @@
 
 说明文字
 
+\chapter{代码}
+
+\begin{Code}
+#include "stdafx.h"
+#include "Acceptor.h"
+#include "TcpStream.h"
+#include <iostream>
+ 
+DEF::SocketInit gSockInit;
+ 
+ 
+int main(int argc, char* argv[])
+{
+    if ( strcmp(argv[1],"-s")== 0 )
+    {
+        DEF::SockAddrIn sockaddr(8823, "127.0.0.1");
+        DEF::Acceptor acctor(sockaddr);
+        DEF::Socketpp sockfd(acctor.Accept());
+        char buf[1024] = { 0 };
+        sockfd.Read(buf,sizeof(buf));
+        std::cout << buf << std::endl;
+    }
+    else if (strcmp(argv[1], "-c") == 0)
+    {
+        DEF::SockAddrIn sockaddr(8823, "127.0.0.1");
+ 
+        DEF::TcpStream::Connect(sockaddr);
+        DEF::TcpStreamPtr stream(DEF::TcpStream::Connect(sockaddr));
+        if (stream.get() == nullptr)
+            return 0;
+        char* buf = "Hello World!";
+        stream->Write(buf,strlen(buf)+1);
+    }
+ 
+     
+    return 0;
+}
+\end{Code}
+
+\begin{Codex}
+#include "stdafx.h"
+#include "Acceptor.h"
+#include "TcpStream.h"
+#include <iostream>
+ 
+DEF::SocketInit gSockInit;
+ 
+ 
+int main(int argc, char* argv[])
+{
+    if ( strcmp(argv[1],"-s")== 0 )
+    {
+        DEF::SockAddrIn sockaddr(8823, "127.0.0.1");
+        DEF::Acceptor acctor(sockaddr);
+        DEF::Socketpp sockfd(acctor.Accept());
+        char buf[1024] = { 0 };
+        sockfd.Read(buf,sizeof(buf));
+        std::cout << buf << std::endl;
+    }
+    else if (strcmp(argv[1], "-c") == 0)
+    {
+        DEF::SockAddrIn sockaddr(8823, "127.0.0.1");
+ 
+        DEF::TcpStream::Connect(sockaddr);
+        DEF::TcpStreamPtr stream(DEF::TcpStream::Connect(sockaddr));
+        if (stream.get() == nullptr)
+            return 0;
+        char* buf = "Hello World!";
+        stream->Write(buf,strlen(buf)+1);
+    }
+ 
+     
+    return 0;
+}
+\end{Codex}
+
+\begin{smallcode}
+#include "stdafx.h"
+#include "Acceptor.h"
+#include "TcpStream.h"
+#include <iostream>
+ 
+DEF::SocketInit gSockInit;
+ 
+ 
+int main(int argc, char* argv[])
+{
+    if ( strcmp(argv[1],"-s")== 0 )
+    {
+        DEF::SockAddrIn sockaddr(8823, "127.0.0.1");
+        DEF::Acceptor acctor(sockaddr);
+        DEF::Socketpp sockfd(acctor.Accept());
+        char buf[1024] = { 0 };
+        sockfd.Read(buf,sizeof(buf));
+        std::cout << buf << std::endl;
+    }
+    else if (strcmp(argv[1], "-c") == 0)
+    {
+        DEF::SockAddrIn sockaddr(8823, "127.0.0.1");
+ 
+        DEF::TcpStream::Connect(sockaddr);
+        DEF::TcpStreamPtr stream(DEF::TcpStream::Connect(sockaddr));
+        if (stream.get() == nullptr)
+            return 0;
+        char* buf = "Hello World!";
+        stream->Write(buf,strlen(buf)+1);
+    }
+ 
+     
+    return 0;
+}
+\end{smallcode}
+
+\includecode{Golang}{test.go}{test.go}
+
 \end{document}
